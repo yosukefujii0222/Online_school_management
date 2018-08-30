@@ -1,9 +1,14 @@
 {% extends 'school/base.html' %}
 
 {% block content %}
-  {% for lesson in lessons %}
-    <div>
-      <div>{{ lesson.charge }}</div>
-    </div>
-  {% endfor %}
+<a href="/">トップページ</a>
+<br><br>
+<div class="menu-container">
+  <div>メニュー</div><br>
+  <a href="{% url 'customer_list' %}">顧客一覧</a><br>
+  <a href="{% url 'lesson_history' %}">レッスン受講記録</a><br>
+  <a href="{% url 'monthly_report' %}">月別請求一覧</a><br>
+  <a href="{% url 'report' %}">レポート</a>
+</div>
+<br>
 {% endblock content %}

@@ -1,6 +1,8 @@
 {% extends 'school/base.html' %}
 
 {% block content %}
+<a href="/">トップページ</a>
+<br><br>
 <p>顧客情報の編集</p>
 <form action="" method="POST">{% csrf_token %}
   {% for field in form %}
