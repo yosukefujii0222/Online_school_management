@@ -1,0 +1,219 @@
+{% extends 'school/base.html' %}
+
+{% block content %}
+<h4>レポート</h4>
+<br>
+<span>対象月</span>
+<form method="GET">
+  <select name="dateSelect">
+    {% for date in date_list %}
+      <option value={{date}}>{{ date.year }}年{{ date.month }}月</option>
+    {% endfor %}
+  </select>
+  <button type="submit">検索</button>
+</form>
+<br>
+
+<p>ジャンルと性別別</p>
+<table border="1">
+  <thead>
+    <tr>
+      <th>ジャンル</th>
+      <th>性別</th>
+      <th>レッスン数</th>
+      <th>受講者数</th>
+      <th>売り上げ</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for lesson in lessons %}
+      <tr>
+        <td>
+          {% if lesson.genre == 1 %}
+            英語
+          {% elif lesson.genre == 2 %}
+            ファイナンス
+          {% elif lesson.genre == 3 %}
+            プログラミング
+          {% endif %}
+        </td>
+        <td>男</td>
+        <td>
+          {% if lesson.genre == 1 %}
+            {{ lesson.get_lesson_history.0.1.0.0.0|length }}
+          {% elif lesson.genre == 2 %}
+            {{ lesson.get_lesson_history.0.1.0.1.0|length }}
+          {% elif lesson.genre == 3 %}
+            {{ lesson.get_lesson_history.0.1.0.2.0|length }}
+          {% endif %}
+        </td>
+        <td>
+          {% if lesson.genre == 1 %}
+            {{ lesson.get_lesson_history.0.2.0.0.0|length }}
+          {% elif lesson.genre == 2 %}
+            {{ lesson.get_lesson_history.0.2.0.1.0|length }}
+          {% elif lesson.genre == 3 %}
+            {{ lesson.get_lesson_history.0.2.0.2.0|length }}
+          {% endif %}
+        </td>
+        <td>
+          {% for gg in genre_gender %}
+            {% if lesson.genre == gg.genre and gg.gender == 1 %}
+              <!-- パラメーターと売り上げが同じ場合に受講者数表示 -->
+              {{ gg.amount }}
+            {% endif %}
+          {% endfor %}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          {% if lesson.genre == 1 %}
+            英語
+          {% elif lesson.genre == 2 %}
+            ファイナンス
+          {% elif lesson.genre == 3 %}
+            プログラミング
+          {% endif %}
+        </td>
+        <td>女</td>
+        <td>
+          {% if lesson.genre == 1 %}
+            {{ lesson.get_lesson_history.0.1.0.0.1|length }}
+          {% elif lesson.genre == 2 %}
+            {{ lesson.get_lesson_history.0.1.0.1.1|length }}
+          {% elif lesson.genre == 3 %}
+            {{ lesson.get_lesson_history.0.1.0.2.1|length }}
+          {% endif %}
+        </td>
+        <td>
+          {% if lesson.genre == 1 %}
+            {{ lesson.get_lesson_history.0.2.0.0.1|length }}
+          {% elif lesson.genre == 2 %}
+            {{ lesson.get_lesson_history.0.2.0.1.1|length }}
+          {% elif lesson.genre == 3 %}
+            {{ lesson.get_lesson_history.0.2.0.2.1|length }}
+          {% endif %}
+        </td>
+        <td>
+          {% for gg in genre_gender %}
+            {% if lesson.genre == gg.genre and gg.gender == 2 %}
+              <!-- パラメーターと売り上げが同じ場合に受講者数表示 -->
+              {{ gg.amount }}
+            {% endif %}
+          {% endfor %}
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<br>
+<p>ジャンルと年齢層別</p>
+<table border="1">
+  <thead>
+    <tr>
+      <th>ジャンル</th>
+      <th>性別</th>
+      <th>年齢層別</th>
+      <th>レッスン数</th>
+      <th>受講者数</th>
+      <th>売り上げ</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for lesson in lessons %}
+      {% for age in ages %}
+        <tr>
+          <td>
+            {% if lesson.genre == 1 %}
+              英語
+            {% elif lesson.genre == 2 %}
+              ファイナンス
+            {% elif lesson.genre == 3 %}
+              プログラミング
+            {% endif %}
+          </td>
+          <td>男</td>
+          <td>{{ age.1 }}代</td>
+          <td>
+            {% for cl in customerLessons %}
+              {% if age.1 == cl.age and lesson.genre == cl.genre and cl.gender == 1 %}
+                <!-- パラメーターと集計月が同じ場合にカウント表示 -->
+                {{ cl.lessonCount }}
+              {% endif %}
+            {% endfor %}
+          </td>
+          <td>
+            {% for cl in customerLessons %}
+              {% if age.1 == cl.age and lesson.genre == cl.genre and cl.gender == 1 %}
+                <!-- パラメーターと集計月が同じ場合に受講者数表示 -->
+                {{ cl.person|length }}
+              {% endif %}
+            {% endfor %}
+          </td>
+          <td>
+            {% for cl in customerLessons %}
+              {% if age.1 == cl.age and lesson.genre == cl.genre and cl.gender == 1 %}
+                <!-- パラメーターと集計月が同じ場合に売り上げ表示 -->
+                {{ cl.amount }}
+              {% endif %}
+            {% endfor %}
+          </td>
+        </tr>
+      {% endfor %}
+
+      {% for age in ages %}
+        <tr>
+          <td>
+            {% if lesson.genre == 1 %}
+              英語
+            {% elif lesson.genre == 2 %}
+              ファイナンス
+            {% elif lesson.genre == 3 %}
+              プログラミング
+            {% endif %}
+          </td>
+          <td>女</td>
+          <td>{{ age.1 }}代</td>
+          <td>
+            {% for cl in customerLessons %}
+              {% if age.1 == cl.age and lesson.genre == cl.genre and cl.gender == 2 %}
+                <!-- パラメーターと集計月が同じ場合にカウント表示 -->
+                {{ cl.lessonCount }}
+              {% endif %}
+            {% endfor %}
+          </td>
+          <td>
+            {% for cl in customerLessons %}
+              {% if age.1 == cl.age and lesson.genre == cl.genre and cl.gender == 2 %}
+                <!-- パラメーターと集計月が同じ場合に受講者数表示 -->
+                {{ cl.person|length }}
+              {% endif %}
+            {% endfor %}
+          </td>
+          <td>
+            {% for cl in customerLessons %}
+              {% if age.1 == cl.age and lesson.genre == cl.genre and cl.gender == 2 %}
+                <!-- パラメーターと売り上げが同じ場合に受講者数表示 -->
+                {{ cl.amount }}
+              {% endif %}
+            {% endfor %}
+          </td>
+        </tr>
+      {% endfor %}
+    {% endfor %}
+  </tbody>
+</table>
+<br>
+<div>ジャンルと性別別の集計結果</div>
+{% for gg in genre_gender %}
+  {{ gg }}
+  <br>
+{% endfor %}
+<br>
+
+<div>ジャンルと年齢層別の集計結果</div>
+{% for cl in customerLessons %}
+  {{ cl }}
+  <br>
+{% endfor %}
+{% endblock content %}

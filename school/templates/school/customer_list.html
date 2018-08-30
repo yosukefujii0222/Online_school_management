@@ -1,0 +1,40 @@
+{% extends 'school/base.html' %}
+
+{% block content %}
+
+<h4>顧客一覧</h4>
+<table border="1">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>名前</th>
+      <th>性別</th>
+      <th>年齢</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+
+    {% for customer in customers %}
+      <tr>
+        <td>{{ customer.id }}</td>
+        <td>{{ customer.name }}</td>
+        {% if customer.gender == 1 %}
+          <td>男</td>
+        {% elif customer.gender == 2 %}
+          <td>女</td>
+        {% else %}
+          <td>その他</td>
+        {% endif %}
+        <td>{{ customer.age }}</td>
+        <td><a href="{% url 'customer_edit' pk=customer.pk %}">編集</a></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<div class="btn">
+  <p><a href="{% url 'new_customer' %}">新規追加</a></p>
+</div>
+
+{% endblock content %}

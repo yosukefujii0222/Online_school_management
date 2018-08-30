@@ -1,0 +1,93 @@
+{% extends 'school/base.html' %}
+
+{% block content %}
+
+<h4>請求月一覧</h4>
+<br>
+<span>請求月</span>
+<form method="GET">
+  <select name="month">
+    <option value=0>{{ first_of_thismonth.year }}年{{ first_of_thismonth.month }}月</option>
+    <option value=1>{{ first_of_onemonth_ago.year }}年{{ first_of_onemonth_ago.month }}月</option>
+    <option value=2>{{ first_of_twomonth_ago.year }}年{{ first_of_twomonth_ago.month }}月</option>
+    <option value=3>{{ first_of_threemonth_ago.year }}年{{ first_of_threemonth_ago.month }}月</option>
+  </select>
+  <button type="submit">検索</button>
+</form>
+
+
+<p>
+  {% if month == "0" or month == null %}<!-- 今月 -->
+    {{ first_of_thismonth.year }}年{{ first_of_thismonth.month }}月　請求一覧
+  {% elif month == "1" %}<!-- 1月前 -->
+    {{ first_of_onemonth_ago.year }}年{{ first_of_onemonth_ago.month }}月　請求一覧
+  {% elif month == "2" %}<!-- 2月前 -->
+    {{ first_of_twomonth_ago.year }}年{{ first_of_twomonth_ago.month }}月　請求一覧
+  {% elif month == "3" %}<!-- 3月前 -->
+    {{ first_of_threemonth_ago.year }}年{{ first_of_threemonth_ago.month }}月　請求一覧
+  {% endif %}
+
+</p>
+<table border="1">
+  <thead>
+    <tr>
+      <th>顧客ID</th>
+      <th>顧客名</th>
+      <th>ジャンル</th>
+      <th>合計レッスン数</th>
+      <th>請求金額</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    {% for customer in customers %}
+      <tr>
+        <td>{{ customer.id }}</td>
+        <td>{{ customer.name }}</td>
+        <td> <!-- ジャンル -->
+          {% if month == "0" or month == null %}<!-- 今月 -->
+            {% for count in customer.getCountPerLesson.0 %}
+              {{ count }}
+            {% endfor %}
+          {% elif month == "1" %}<!-- 1月前 -->
+            {% for count in customer.getCountPerLesson.1 %}
+              {{ count }}
+            {% endfor %}
+          {% elif month == "2" %}<!-- 2月前 -->
+            {% for count in customer.getCountPerLesson.2 %}
+              {{ count }}
+            {% endfor %}
+          {% elif month == "3" %}<!-- 3月前 -->
+            {% for count in customer.getCountPerLesson.3 %}
+              {{ count }}
+            {% endfor %}
+          {% endif %}
+        </td>
+        <td> <!-- 合計レッスン数 -->
+          {% if month == "0" or month == null %}<!-- 今月 -->
+            <span>{{ customer.getLessonHistory.0.count }}</span>
+          {% elif month == "1" %}<!-- 1月前 -->
+            <span>{{ customer.getLessonHistory.1.count }}</span>
+          {% elif month == "2" %}<!-- 2月前 -->
+            <span>{{ customer.getLessonHistory.2.count }}</span>
+          {% elif month == "3" %}<!-- 3月前 -->
+            <span>{{ customer.getLessonHistory.3.count }}</span>
+          {% endif %}
+        </td>
+        <td> <!-- 請求金額 -->
+          {% if month == "0" or month == null %}<!-- 今月 -->
+            <span>{{ customer.calculate_total_price.0 }}</span>
+          {% elif month == "1" %}<!-- 1月前 -->
+            <span>{{ customer.calculate_total_price.1 }}</span>
+          {% elif month == "2" %}<!-- 2月前 -->
+            <span>{{ customer.calculate_total_price.2 }}</span>
+          {% elif month == "3" %}<!-- 3月前 -->
+            <span>{{ customer.calculate_total_price.3 }}</span>
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock content %}

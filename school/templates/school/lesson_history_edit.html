@@ -1,0 +1,16 @@
+{% extends 'school/base.html' %}
+
+{% block content %}
+
+<p>レッスン受講記録の編集</p>
+<form action="" method="POST">{% csrf_token %}
+  {% for field in form %}
+  <div class="form-group">
+      <label for="{{ field.id_for_label }}">{{ field.label_tag }}</label>
+      {{ field }}
+  </div>
+  {% endfor %}
+  <button type="submit">登録</button>
+</form>
+
+{% endblock content %}

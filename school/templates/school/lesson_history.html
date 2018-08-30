@@ -1,0 +1,44 @@
+{% extends 'school/base.html' %}
+
+{% block content %}
+
+<h4>レッスン受講記録一覧</h4>
+<table border="1">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>受講者</th>
+      <th>ジャンル</th>
+      <th>受講日</th>
+      <th>受講時間</th>
+      <th>支払い金額</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+
+    {% for history in histories %}
+      <tr>
+        <td>{{ history.id }}</td>
+        <td>{{ history.customer }}</td>
+        {% if history.lesson.genre == 1 %}
+          <td>英語</td>
+        {% elif history.lesson.genre == 2 %}
+          <td>ファイナンス</td>
+        {% elif history.lesson.genre == 3 %}
+          <td>プログラミング</td>
+        {% endif %}
+        <td>{{ history.date }}</td>
+        <td>{{ history.hour }}</td>
+        <td>{{ history.calculate_price }}</td>
+        <td><a href="{% url 'lesson_history_edit' pk=history.pk %}">編集</a></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<div class="btn">
+  <p><a href="{% url 'new_lesson_history' %}">新規追加</a></p>
+</div>
+
+{% endblock content %}
